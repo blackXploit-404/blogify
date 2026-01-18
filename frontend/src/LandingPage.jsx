@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = ({ onGetStarted }) => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Navigation */}
@@ -10,7 +12,7 @@ const LandingPage = ({ onGetStarted }) => {
             <div className="flex items-center space-x-3">
               <img src="/blog.png" alt="BlogApp" className="h-10 w-14 object-contain" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                BlogApp
+                Blogify - blogs made easy
               </span>
             </div>
             <button
@@ -48,7 +50,10 @@ const LandingPage = ({ onGetStarted }) => {
               >
                 Start Writing Today
               </button>
-              <button className="bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-full text-lg font-semibold border-2 border-gray-200 hover:border-gray-300 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md">
+              <button 
+                onClick={() => navigate('/privacy')}
+                className="bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-full text-lg font-semibold border-2 border-gray-200 hover:border-gray-300 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md"
+              >
                 Learn More
               </button>
             </div>
@@ -174,7 +179,7 @@ const LandingPage = ({ onGetStarted }) => {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
                 <img src="/blog.png" alt="BlogApp" className="h-10 w-14 object-contain" />
-                <span className="text-2xl font-bold text-white">BlogApp</span>
+                <span className="text-2xl font-bold text-white">Blogify</span>
               </div>
               <p className="text-gray-400 mb-4 max-w-md">
                 A modern blogging platform that empowers writers to share their stories and connect with readers worldwide.
@@ -183,17 +188,17 @@ const LandingPage = ({ onGetStarted }) => {
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Templates</a></li>
+                <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors">Features</button></li>
+                <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors">Pricing</button></li>
+                <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors">Templates</button></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
+                <li><button onClick={() => navigate('/')} className="hover:text-white transition-colors">Help Center</button></li>
+                <li><button onClick={() => navigate('/Contact')} className="hover:text-white transition-colors">Contact</button></li>
+                <li><button onClick={() => navigate('/privacy')} className="hover:text-white transition-colors">Privacy</button></li>
               </ul>
             </div>
           </div>

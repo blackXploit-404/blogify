@@ -8,6 +8,8 @@ import BlogDetail from './BlogDetail';
 import CreateBlog from './CreateBlog';
 import AdminDashboard from './AdminDashboard';
 import LandingPage from './LandingPage';
+import PrivacyPolicy from './privacy';
+import Contact from './Contact';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -160,6 +162,8 @@ const AppContent = () => {
       <Route path="/login" element={<PublicRoute><AuthPages /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><Register onToggle={() => window.location.href = '/login'} /></PublicRoute>} />
       <Route path="/blogs" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

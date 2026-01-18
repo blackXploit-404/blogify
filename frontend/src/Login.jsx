@@ -1,5 +1,6 @@
 import React,{ useState } from 'react';
 import { useAuth } from './AuthContext';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Login = ({ onToggle }) => {
   const { login } = useAuth();
@@ -9,6 +10,7 @@ const Login = ({ onToggle }) => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -21,6 +23,12 @@ const Login = ({ onToggle }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    if (!recaptchaToken) {
+      setError('Please verify the reCAPTCHA');
+      setLoading(false);
+      return;
+    }
 
     const result = await login(formData);
     if (!result.success) {
@@ -84,6 +92,14 @@ const Login = ({ onToggle }) => {
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-black focus:ring-offset-0 focus:border-transparent transition-all duration-200 outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
               />
             </div>
+
+            <div className="mt-6 flex justify-center">
+              <ReCAPTCHA 
+                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                onChange={setRecaptchaToken}
+              />
+            </div>
+
             <button
               type="submit"
               disabled={loading}

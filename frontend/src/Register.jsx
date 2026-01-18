@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import VerifyOTP from './VerifyOTP';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Register = ({ onToggle }) => {
   const { register } = useAuth();
@@ -15,6 +16,7 @@ const Register = ({ onToggle }) => {
   const [verificationSent, setVerificationSent] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -27,6 +29,12 @@ const Register = ({ onToggle }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    if (!recaptchaToken) {
+      setError('Please verify the reCAPTCHA');
+      setLoading(false);
+      return;
+    }
 
     const result = await register(formData);
     if (!result.success) {
@@ -160,6 +168,13 @@ const Register = ({ onToggle }) => {
                 )}
               </button>
             </div>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <ReCAPTCHA 
+              sitekey="6Lc5eE4sAAAAAIbMi7NevUJfH54sHhBEoK097Vqp"
+              onChange={setRecaptchaToken}
+            />
           </div>
 
           <button
