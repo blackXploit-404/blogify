@@ -59,7 +59,7 @@ const Login = ({ onToggle }) => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="name@company.com"
+                placeholder="verified@email.com"
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-black focus:ring-offset-0 focus:border-transparent transition-all duration-200 outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
               />
             </div>
