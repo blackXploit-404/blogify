@@ -153,7 +153,7 @@ export default function PrivacyPolicy() {
                 <li><strong>Opt-out:</strong> Unsubscribe from marketing communications</li>
                 <li><strong>Withdraw Consent:</strong> Withdraw consent for specific data processing activities</li>
               </ul>
-              <p className="text-gray-700">To exercise any of these rights, please contact us at <strong>privacy@blogify.com</strong></p>
+              <p className="text-gray-700">To exercise any of these rights, please contact us at <strong>blogify-privacy@surajitsen.live</strong></p>
             </section>
 
             <section className="mb-8">
@@ -189,7 +189,7 @@ export default function PrivacyPolicy() {
               <p className="text-gray-700 mb-3">If you have any questions or concerns about this Privacy Policy or our privacy practices, please contact us at:</p>
               <div className="bg-white p-6 rounded-lg border border-gray-200">
                 <p className="text-gray-700"><strong>Blogify Support Team</strong></p>
-                <p className="text-gray-700">Email: privacy@blogify.com</p>
+                <p className="text-gray-700">Email: blogify-privacy@surajitsen.live </p>
                 <p className="text-gray-700">Website: www.blogify.com</p>
               </div>
             </section>
