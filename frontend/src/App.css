@@ -14,3 +14,72 @@
 .animate-slideIn {
   animation: slideIn 0.3s ease-out;
 }
+
+/* EasyMDE editor styling fixes */
+.EasyMDEContainer .CodeMirror {
+  background-color: white;
+  color: #1f2937;
+  border: none;
+}
+
+.EasyMDEContainer .CodeMirror-scroll {
+  background-color: white;
+}
+
+.EasyMDEContainer .CodeMirror-cursor {
+  border-left: 1px solid #1f2937;
+}
+
+.EasyMDEContainer .cm-s-easymde .cm-header {
+  color: #1f2937;
+}
+
+.EasyMDEContainer .cm-s-easymde .cm-link {
+  color: #2563eb;
+}
+
+.EasyMDEContainer .cm-s-easymde .cm-quote {
+  color: #6b7280;
+}
+
+.EasyMDEContainer .cm-s-easymde .cm-strong {
+  color: #1f2937;
+  font-weight: bold;
+}
+
+.EasyMDEContainer .cm-s-easymde .cm-em {
+  color: #1f2937;
+  font-style: italic;
+}
+
+.EasyMDEContainer .editor-preview {
+  background-color: white;
+  color: #1f2937;
+}
+
+.EasyMDEContainer .editor-preview p,
+.EasyMDEContainer .editor-preview-side p {
+  color: #1f2937;
+}
+
+.EasyMDEContainer .editor-toolbar {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.EasyMDEContainer .editor-toolbar button {
+  color: #4b5563 !important;
+}
+
+.EasyMDEContainer .editor-toolbar button:hover {
+  background-color: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.EasyMDEContainer .editor-toolbar.fullscreen {
+  background-color: #f9fafb;
+}
+
+.EasyMDEContainer .CodeMirror-placeholder {
+  color: #9ca3af !important;
+}

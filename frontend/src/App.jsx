@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
-import LandingPage from './LandingPage';
 import Login from './Login';
 import Register from './Register';
 import BlogList from './BlogList';
+import BlogDetail from './BlogDetail';
 import CreateBlog from './CreateBlog';
 import AdminDashboard from './AdminDashboard';
 import './App.css';
 
-const AppContent = () => {
-  const { user, logout, loading } = useAuth();
-  const [showRegister, setShowRegister] = useState(false);
-  const [showCreateBlog, setShowCreateBlog] = useState(false);
-  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
-  const [refreshBlogs, setRefreshBlogs] = useState(0);
-  const [showLanding, setShowLanding] = useState(true);
-  const [currentPage, setCurrentPage] = useState('landing'); 
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -28,31 +23,45 @@ const AppContent = () => {
     );
   }
 
-  // Show landing page for non-authenticated users
-  if (!user && showLanding) {
-    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
-  if (!user) {
+  return children;
+};
+
+const PublicRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
     return (
-      <div>
-        {showRegister ? (
-          <Register onToggle={() => setShowRegister(false)} />
-        ) : (
-          <Login onToggle={() => setShowRegister(true)} />
-        )}
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
       </div>
     );
   }
 
+  if (user) {
+    return <Navigate to="/blogs" replace />;
+  }
+
+  return children;
+};
+
+const Dashboard = () => {
+  const { user, logout } = useAuth();
+  const [showCreateBlog, setShowCreateBlog] = useState(false);
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+  const [refreshBlogs, setRefreshBlogs] = useState(0);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Modern Navigation Bar */}
       <nav className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* Brand */}
             <div className="flex items-center space-x-4">
               <img src="/blog.png" alt="BlogApp" className="h-10 w-14 object-contain" />
               <div>
@@ -61,7 +70,6 @@ const AppContent = () => {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="flex items-center space-x-3">
               <span className="hidden sm:inline-block px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
                 {user.role}
@@ -100,7 +108,6 @@ const AppContent = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
       <main>
         {showAdminDashboard ? (
           <AdminDashboard />
@@ -119,12 +126,40 @@ const AppContent = () => {
   );
 };
 
+const AuthPages = () => {
+  const [showRegister, setShowRegister] = useState(false);
+
+  return (
+    <div>
+      {showRegister ? (
+        <Register onToggle={() => setShowRegister(false)} />
+      ) : (
+        <Login onToggle={() => setShowRegister(true)} />
+      )}
+    </div>
+  );
+};
+
+const AppContent = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<PublicRoute><AuthPages /></PublicRoute>} />
+      <Route path="/register" element={<PublicRoute><Register onToggle={() => window.location.href = '/login'} /></PublicRoute>} />
+      <Route path="/blogs" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
+      <Route path="/" element={<Navigate to="/blogs" replace />} />
+      <Route path="*" element={<Navigate to="/blogs" replace />} />
+    </Routes>
+  );
+};
+
 function App() {
   return (
-
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
   );
 }
 

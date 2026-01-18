@@ -51,9 +51,11 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authAPI.register(userData);
-      localStorage.setItem('token', response.data.token);
-      setUser(response.data.user);
-      return { success: true };
+      return { 
+        success: true, 
+        message: response.data.message,
+        requiresVerification: true
+      };
     } catch (error) {
       return { 
         success: false, 

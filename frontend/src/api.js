@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://blogify-fr8k.onrender.com/api';
+const API_BASE_URL = 'https://blogify-backend.surajitsen.live/api/';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -9,6 +9,13 @@ const api = axios.create({
   },
 });
 
+// separate instance for public endpoints
+const publicApi = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
@@ -23,6 +30,14 @@ export const authAPI = {
   register: (userData) => api.post('/auth/register', userData),
   login: (credentials) => api.post('/auth/login', credentials),
   getMe: () => api.get('/auth/me'),
+  verifyEmail: (token) => {
+    console.log('API call: verifying email with token:', token);
+    return publicApi.get(`/auth/verify-email?token=${token}`);
+  },
+  verifyOTP: (data) => {
+    console.log('API call: verifying OTP for email:', data.email);
+    return publicApi.post('/auth/verify-otp', data);
+  },
 };
 
 

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { blogAPI } from './api';
 import { useAuth } from './AuthContext';
 import { Plus, Trash2, Calendar, User, ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const BlogList = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -38,7 +40,7 @@ const BlogList = () => {
     }
   };
 
-  // --- Sub-components for better organization ---
+ 
 
   const SkeletonCard = () => (
     <div className="bg-white border border-zinc-100 p-8 rounded-3xl animate-pulse">
@@ -106,11 +108,23 @@ const BlogList = () => {
             {blogs.map((blog, index) => (
               <article 
                 key={blog._id} 
-                className={`group relative bg-white border border-zinc-100 p-8 rounded-[32px] transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] hover:-translate-y-2 flex flex-col justify-between ${
+                onClick={() => navigate(`/blog/${blog._id}`)}
+                className={`group relative bg-white border border-zinc-100 rounded-[32px] transition-all duration-500 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] hover:-translate-y-2 flex flex-col justify-between cursor-pointer overflow-hidden ${
                   index === 0 ? 'md:col-span-2 lg:col-span-2' : ''
                 }`}
               >
-                <div>
+                {/* Featured Image Banner */}
+                {blog.imageUrl && (
+                  <div className="w-full h-48 md:h-64 overflow-hidden bg-zinc-100">
+                    <img 
+                      src={blog.imageUrl} 
+                      alt={blog.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+
+                <div className="p-8">
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-zinc-100 flex items-center justify-center">
@@ -136,7 +150,7 @@ const BlogList = () => {
                   </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="px-8 pb-8 space-y-6">
                   {blog.tags && blog.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {blog.tags.slice(0, 3).map((tag, i) => (
@@ -147,10 +161,13 @@ const BlogList = () => {
                     </div>
                   )}
                     
-                    {/* Security check: using optional chaining to prevent crashes */}
+                    
                     {user && (blog.author?._id === user.id || user.role === 'admin') && (
                       <button 
-                        onClick={() => deleteBlog(blog._id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteBlog(blog._id);
+                        }}
                         className="p-2.5 text-zinc-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                         aria-label="Delete Blog"
                       >

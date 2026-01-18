@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const blogs = await Blog.find({ published: true })
-            .populate('author', 'name email')
+        const blogs = await Blog.find({ published: true }, 'title content author tags published imageUrl createdAt updatedAt')
+            .populate('author', 'name ')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
@@ -33,8 +33,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const blog = await Blog.findById(req.params.id)
-            .populate('author', 'name email');
+        const blog = await Blog.findById(req.params.id, 'title content author tags published imageUrl createdAt updatedAt')
+            .populate('author', 'name'); // 
 
         if (!blog) {
             return res.status(404).json({ message: 'Blog not found' });
@@ -58,14 +58,15 @@ router.post('/', [
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { title, content, tags, published } = req.body;
+        const { title, content, tags, published , imageUrl} = req.body; //added image url
 
         const blog = new Blog({
             title,
             content,
             author: req.user._id,
             tags: tags || [],
-            published: published || false
+            published: published || false,
+            imageUrl : imageUrl || null // default 
         });
 
         await blog.save();
@@ -101,12 +102,13 @@ router.put('/:id', [
             return res.status(403).json({ message: 'Not authorized to update this blog' });
         }
 
-        const { title, content, tags, published } = req.body;
-
+        const { title, content, tags, published , imageUrl } = req.body;
+        console.log('Received imageurl:',imageUrl)
         if (title) blog.title = title;
         if (content) blog.content = content;
         if (tags) blog.tags = tags;
         if (published !== undefined) blog.published = published;
+        if (imageUrl !== undefined) blog.imageUrl = imageUrl; // update image url
 
         await blog.save();
         await blog.populate('author', 'name email');
@@ -147,7 +149,7 @@ router.get('/user/me', auth, async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const blogs = await Blog.find({ author: req.user._id })
+        const blogs = await Blog.find({ author: req.user._id }, 'title content author tags published imageUrl createdAt updatedAt')
             .populate('author', 'name email')
             .sort({ createdAt: -1 })
             .skip(skip)
@@ -173,7 +175,7 @@ router.get('/admin/all', adminAuth, async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const blogs = await Blog.find({})
+        const blogs = await Blog.find({}, 'title content author tags published imageUrl createdAt updatedAt')
             .populate('author', 'name email')
             .sort({ createdAt: -1 })
             .skip(skip)

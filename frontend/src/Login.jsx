@@ -38,7 +38,6 @@ const Login = ({ onToggle }) => {
             <p className="text-gray-500 mt-3 text-base leading-relaxed">Sign in to your account to continue</p>
           </div>
 
-          {/* Error Alert with better styling */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 animate-slideIn">
               <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -48,9 +47,7 @@ const Login = ({ onToggle }) => {
             </div>
           )}
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email Field */}
             <div className="group">
               <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-2.5 group-focus-within:text-black transition-colors">
                 Email Address
@@ -67,27 +64,26 @@ const Login = ({ onToggle }) => {
               />
             </div>
 
-            {/* Password Field */}
-                  <div className="group">
-                    <div className="flex justify-between items-center mb-2.5">
-                    <label htmlFor="password" className="block text-sm font-semibold text-gray-800 group-focus-within:text-black transition-colors">
-                      Password
-                    </label>
-                    <a href="#" className="text-xs font-medium text-gray-600 hover:text-black hover:underline transition-all duration-200">
-                      Forgot password?
-                    </a>
-                    </div>
-                    <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="**********"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-black focus:ring-offset-0 focus:border-transparent transition-all duration-200 outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
-                    />
-                  </div>
+            <div className="group">
+              <div className="flex justify-between items-center mb-2.5">
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-800 group-focus-within:text-black transition-colors">
+                  Password
+                </label>
+                <a href="#" className="text-xs font-medium text-gray-600 hover:text-black hover:underline transition-all duration-200">
+                  Forgot password?
+                </a>
+              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="**********"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-black focus:ring-offset-0 focus:border-transparent transition-all duration-200 outline-none text-gray-900 placeholder:text-gray-400 hover:border-gray-400"
+              />
+            </div>
             <button
               type="submit"
               disabled={loading}
@@ -112,7 +108,6 @@ const Login = ({ onToggle }) => {
             </button>
           </form>
 
-          {/* Footer with improved styling */}
           <div className="mt-10 text-center border-t border-gray-200 pt-6">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
