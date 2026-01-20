@@ -9,28 +9,36 @@ const slowDown = require("express-slow-down");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const limiter = rateLimit({
-  windowMs: 2 * 60 * 1000,
-  max: 3,
-  statusCode: 429,
-  keyGenerator: (req) => {
-    return req.ip;
-  },
-  handler: (req, res) => {
-    console.log(`[RATE LIMIT] IP: ${req.ip} exceeded rate limit`);
-    res.status(429).json({
-      error: "Too Many Requests",
-      message: "Hey cool down ! You can only make 3 requests every 2 minutes."
-    });
-  }
-});
-const speedLimiter = slowDown({
-  windowMs: 2 * 60 * 1000,
-  delayAfter: 1,
-  delayMs: () => 2000,
-});
-app.use(speedLimiter);
-app.use(limiter);
+
+if (process.env.NODE_ENV === 'production') {
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100, 
+    statusCode: 429,
+    keyGenerator: (req) => {
+      return req.ip;
+    },
+    handler: (req, res) => {
+      console.log(`[RATE LIMIT] IP: ${req.ip} exceeded rate limit`);
+      res.status(429).json({
+        error: "Too Many Requests",
+        message: "Hey cool down ! You can only make 100 requests every 15 minutes."
+      });
+    }
+  });
+  
+  const speedLimiter = slowDown({
+    windowMs: 15 * 60 * 1000, 
+    delayAfter: 50,
+    delayMs: () => 500, 
+  });
+  
+  app.use(speedLimiter);
+  app.use(limiter);
+  console.log('Rate limiting enabled (Production mode)');
+} else {
+  console.log('Rate limiting disabled (Development mode)');
+}
 
 connectDB();
 
