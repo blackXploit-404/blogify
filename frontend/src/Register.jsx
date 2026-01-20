@@ -204,9 +204,12 @@ const Register = ({ onToggle }) => {
               Sign in
             </button>
           </p>
+          
         </div>
       </div>
+      
     </div>
+    
   );
 };
 

@@ -203,6 +203,17 @@ const LandingPage = ({ onGetStarted }) => {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+            <div className="flex justify-center mb-6">
+              <a 
+                href="https://stats.uptimerobot.com/ucLvlFewRq/802168320" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                <span className="inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                Status
+              </a>
+            </div>
             <p className="text-gray-400">
               © 2026 Blogify. All rights reserved. Made with ❤️ for writers everywhere.<br></br>
               [This landing page is just a template and may be inaccurate ]
