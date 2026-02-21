@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@sentry/react": "^10.36.0",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "badge-maker": "^5.0.2",
     "easymde": "^2.20.0",
     "lucide-react": "^0.562.0",
