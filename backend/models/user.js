@@ -22,7 +22,9 @@ const userSchema = new mongoose.Schema({
     },
     isVerified: { type: Boolean, default: false },
     otp: { type: String },
-    otpExpiry: { type: Date }
+    otpExpiry: { type: Date },
+    resetPasswordOtp: { type: String },
+    resetPasswordOtpExpiry: { type: Date }
 
 }, {
     timestamps: true
@@ -34,5 +36,12 @@ userSchema.methods.generateOTP = function () {
   this.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
   return otp;
 }; // added otp verification method
+
+userSchema.methods.generatePasswordResetOTP = function () {
+  const otp = crypto.randomInt(100000, 999999).toString();
+  this.resetPasswordOtp = otp;
+  this.resetPasswordOtpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+  return otp;
+};
 
 module.exports = mongoose.model('User', userSchema);

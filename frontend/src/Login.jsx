@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-const Login = ({ onToggle }) => {
+const Login = ({ onToggle, onForgotPassword }) => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -88,6 +88,9 @@ const Login = ({ onToggle }) => {
               <label htmlFor="password" className="block text-sm font-medium text-white/60">
                 Password
               </label>
+              <button type="button" onClick={onForgotPassword} className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+                Forgot password?
+              </button>
             </div>
             <input
               id="password"

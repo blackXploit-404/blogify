@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'r
 import { AuthProvider, useAuth } from './AuthContext';
 import Login from './Login';
 import Register from './Register';
+import ForgotPassword from './ForgotPassword';
 import BlogList from './BlogList';
 import BlogDetail from './BlogDetail';
 import CreateBlog from './CreateBlog';
@@ -109,14 +110,16 @@ const Dashboard = () => {
 };
 
 const AuthPages = () => {
-  const [showRegister, setShowRegister] = useState(false);
+  const [view, setView] = useState('login'); // 'login' | 'register' | 'forgot'
 
   return (
     <div>
-      {showRegister ? (
-        <Register onToggle={() => setShowRegister(false)} />
+      {view === 'register' ? (
+        <Register onToggle={() => setView('login')} />
+      ) : view === 'forgot' ? (
+        <ForgotPassword onBackToLogin={() => setView('login')} />
       ) : (
-        <Login onToggle={() => setShowRegister(true)} />
+        <Login onToggle={() => setView('register')} onForgotPassword={() => setView('forgot')} />
       )}
     </div>
   );

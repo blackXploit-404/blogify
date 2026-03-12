@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = 'https://blogify-backend.surajitsen.live/api/';
-
+//const API_BASE_URL = 'http://localhost:3000/api/'; //for dev
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -62,6 +62,8 @@ export const authAPI = {
     console.log('API call: verifying OTP for email:', data.email);
     return publicApi.post('/auth/verify-otp', data);
   },
+  forgotPassword: (email) => publicApi.post('/auth/forgot-password', { email }),
+  resetPassword: (data) => publicApi.post('/auth/reset-password', data),
 };
 
 

@@ -4,9 +4,19 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const { auth } = require('../middleware/auth');
-const { sendVerificationEmail } = require('../utils/email');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/email');
 require('dotenv').config();
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
+
+// Rate limiter for password reset endpoints — 5 requests per 15 minutes per IP
+const passwordResetLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: { message: 'Too many password reset attempts. Please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
 
 router.post('/register', [
     body('name').notEmpty().withMessage('Name is required'),
@@ -194,6 +204,77 @@ router.post('/verify-otp', async (req, res) => {
     } catch (error) {
         console.error('OTP verification error:', error);
         res.status(500).json({ message: 'Server error during verification' });
+    }
+});
+
+// ─── Password Reset Flow ────────────────────────────────────────────
+
+// Step 1: Request password reset OTP
+router.post('/forgot-password', passwordResetLimiter, [
+    body('email').isEmail().withMessage('Valid email is required')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        // Always return success to prevent email enumeration
+        if (!user) {
+            return res.json({ message: 'If an account with that email exists, a reset OTP has been sent.' });
+        }
+
+        const otp = user.generatePasswordResetOTP();
+        await user.save();
+
+        await sendPasswordResetEmail({ toEmail: user.email, otp });
+
+        res.json({ message: 'If an account with that email exists, a reset OTP has been sent.' });
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Step 2: Verify OTP and set new password
+router.post('/reset-password', passwordResetLimiter, [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('otp').notEmpty().withMessage('OTP is required'),
+    body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { email, otp, newPassword } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired reset request' });
+        }
+
+        if (!user.resetPasswordOtp || user.resetPasswordOtp !== otp) {
+            return res.status(400).json({ message: 'Invalid OTP' });
+        }
+
+        if (user.resetPasswordOtpExpiry < new Date()) {
+            return res.status(400).json({ message: 'OTP has expired. Please request a new one.' });
+        }
+
+        user.password = await bcrypt.hash(newPassword, 12);
+        user.resetPasswordOtp = undefined;
+        user.resetPasswordOtpExpiry = undefined;
+        await user.save();
+
+        res.json({ message: 'Password reset successful. You can now log in with your new password.' });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
