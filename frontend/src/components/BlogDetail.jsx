@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { blogAPI } from './api';
-import { useAuth } from './AuthContext';
+import { blogAPI } from '../api';
+import { useAuth } from '../Auth/AuthContext';
 import { ArrowLeft, User, Calendar, Trash2, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
@@ -56,7 +56,7 @@ const BlogDetail = () => {
           onClick={() => navigate('/blogs')}
           className="flex items-center gap-2 px-6 py-3 bg-white/[0.06] text-white rounded-xl hover:bg-white/[0.1] transition-colors"
         >
-          <ArrowLeft size={18} /> Back to blogs
+          <ArrowLeft size={25} /> Back to blogs
         </button>
       </div>
     );
