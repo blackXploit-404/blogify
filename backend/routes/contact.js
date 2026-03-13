@@ -1,4 +1,4 @@
-const express = require("express");
+/* const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const path = require("path");
@@ -63,3 +63,5 @@ router.post(
 );
 
 module.exports = router;
+ */
+//contact.js is commented out for now due to some issue with excel sheet storing and we have find a better solution for it using web3forms instead of manual writing everything , but in future we can use this for better management of contact queries.
