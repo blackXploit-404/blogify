@@ -3,6 +3,7 @@ dns.setServers(['1.1.1.1', '8.8.8.8']);
 
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const connectDB = require('./db');
 require('dotenv').config();
@@ -45,7 +46,13 @@ if (process.env.NODE_ENV === 'production') {
 
 connectDB();
 
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map((o) => o.trim()) : true,
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

@@ -9,6 +9,13 @@ require('dotenv').config();
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
 
+const tokenCookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000
+};
+
 // Rate limiter for password reset endpoints — 5 requests per 15 minutes per IP
 const passwordResetLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -90,6 +97,8 @@ router.post('/login', [
             process.env.JWT_SECRET.trim(),
             { expiresIn: '24h' }
         );
+
+        res.cookie('token', token, tokenCookieOptions);
 
         res.json({
             message: 'Login successful',
@@ -195,6 +204,8 @@ router.post('/verify-otp', async (req, res) => {
             { expiresIn: '24h' }
         );
 
+        res.cookie('token', token, tokenCookieOptions);
+
         res.json({ 
             message: 'Email verified successfully',
             token,
@@ -286,6 +297,11 @@ router.post('/reset-password', passwordResetLimiter, [
         console.error('Reset password error:', error);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('token', tokenCookieOptions);
+    res.json({ message: 'Logged out successfully' });
 });
 
 module.exports = router;

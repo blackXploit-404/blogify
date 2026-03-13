@@ -3,7 +3,9 @@ const User = require('../models/user');
 require('dotenv').config();
 const auth = async (req, res, next) => {
     try {
-        const token = req.header('Authorization')?.replace('Bearer ', '');
+        const bearerToken = req.header('Authorization')?.replace('Bearer ', '');
+        const cookieToken = req.cookies?.token;
+        const token = bearerToken || cookieToken;
         
         if (!token) {
             return res.status(401).json({ message: 'No token, authorization denied' });
