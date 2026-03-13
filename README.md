@@ -1,3 +1,7 @@
+[![Backend Deploy](https://github.com/blackXploit-404/blogify/actions/workflows/deploy-backend.yml/badge.svg)](https://github.com/blackXploit-404/blogify/actions/workflows/deploy-backend.yml)
+
+[![Node Security Scan](https://github.com/blackXploit-404/blogify/actions/workflows/node-security.yml/badge.svg)](https://github.com/blackXploit-404/blogify/actions/workflows/node-security.yml)
+
 # Blogify Project
 
 A modern blogging platform built with MongoDB, Express, React, and Node.js. Currently in active development.
