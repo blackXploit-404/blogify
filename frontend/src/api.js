@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://blogify-backend.surajitsen.live/api/';
-//const API_BASE_URL = 'http://localhost:3000/api/'; //for dev
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/';
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -90,7 +89,11 @@ export const blogAPI = {
 };
 
 export const commentAPI = {
-  addComment: (blogId, payload) => api.post(`/comments/${blogId}/comment`, payload),
+	addComment: (blogId, payload ) => {
+    return api.post(`/comments/${blogId}/comment`, {
+      ...payload,
+    });
+	},
   getBlogComments: (blogId) => publicApi.get(`/comments/${blogId}/comments`),
   deleteComment: (commentId) => api.delete(`/comments/comment/${commentId}`),
 };
